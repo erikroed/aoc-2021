@@ -4,50 +4,31 @@ import readInput
 
 fun main() {
     fun part1(input: List<String>): Int {
-        var hit = 0
+        var horizontal = 0
+        var depth = 0
 
-        input.forEachIndexed { index, element ->
-            if (index == 0) return@forEachIndexed
+        input.forEach {
+            val operation = it.substringBefore(" ").lowercase()
+            val value = it.substringAfter(" ").toInt()
 
-            val previousNumber = input.elementAt(index.minus(1)).toInt()
-            val currentNumber = element.toInt()
-            if (currentNumber > previousNumber) {
-                hit++
+            when (operation) {
+                "forward" -> horizontal += value
+                "down" -> depth += value
+                "up" -> depth -= value
             }
         }
 
-        return hit
+        return horizontal * depth
     }
 
     fun part2(input: List<String>): Int {
-        var hit = 0
-
-        input.forEachIndexed { index, _ ->
-            val toPosition = index.plus(3)
-            val secondFromPosition = index.plus(1)
-            val secondToPosition = toPosition.plus(1)
-
-            val validPosition =
-                listOf(index, toPosition, secondFromPosition, secondToPosition).all { it <= input.size }
-
-            if (validPosition) {
-                val firstChunk = input.subList(index, toPosition).sumOf { it.toInt() }
-                val secondChunk = input.subList((index + 1), (toPosition + 1)).sumOf { it.toInt() }
-
-                if (secondChunk > firstChunk) {
-                    hit++
-                }
-            }
-
-        }
-
-        return hit
+        return input.size
     }
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("day2/Day02_test")
-    check(part1(testInput) == 7)
-    check(part2(testInput) == 5)
+    check(part1(testInput) == 150)
+    check(part2(testInput) == 6)
 
     val input = readInput("day2/Day02")
     println(part1(input))
